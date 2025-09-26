@@ -1,16 +1,24 @@
-# CodeDoc - AI-Powered Codebase Documentation Generator
+# CodeDoc v1.0 - Codebase Documentation Generator
 
-CodeDoc is a lightweight Go CLI tool that analyzes your codebase and generates comprehensive documentation using AI. It scans local repositories or public Git repos, detects frameworks and patterns, and produces a concise Markdown report with architectural insights.
+CodeDoc is a lightweight Go CLI tool that analyzes your codebase and generates structured documentation reports. This first version focuses on local repository scanning with basic analysis capabilities.
 
-## Features
+## Version 1.0 Features (Current)
 
-- 🚀 **Fast Scanning**: Efficiently walks through codebases with smart ignore patterns
-- 🤖 **AI-Powered Summaries**: Uses Claude (Anthropic) for intelligent code understanding
-- 📊 **Language Detection**: Automatically identifies and reports language breakdown
-- 🔍 **Framework Detection**: Recognizes popular frameworks and build tools
-- 💾 **Smart Caching**: File-level caching prevents redundant API calls
-- 🔒 **Security Conscious**: Redacts secrets and sensitive information
-- 🎯 **Focused Output**: Strict word limits ensure concise, scannable reports
+- 📁 **Local Repository Scanning**: Analyze codebases from local filesystem paths
+- 📊 **Language Detection**: Identifies programming languages and calculates LOC (lines of code)
+- 🔍 **Smart File Walking**: Respects common ignore patterns (node_modules, .git, vendor, etc.)
+- 📝 **Structured Reports**: Generates CODEBASE_REPORT.md with consistent formatting
+- 🏃 **Dry Run Mode**: Generate skeleton reports without external dependencies
+- 🎯 **File Limits**: Control analysis scope with max-files and max-lines-per-file options
+
+## What's NOT in v1.0 (Coming Soon)
+
+- ❌ **No LLM Integration**: AI-powered summaries not yet implemented
+- ❌ **No Git Cloning**: --repo-url flag present but not functional
+- ❌ **No Caching**: File-level caching system not implemented
+- ❌ **No Framework Detection**: Framework/library detection pending
+- ❌ **No Endpoint Detection**: API route detection not available
+- ❌ **No Model Detection**: Data model identification not implemented
 
 ## Installation
 
@@ -31,12 +39,10 @@ make install
 ### Prerequisites
 
 - Go 1.22 or higher
-- Git (for repository cloning features)
-- Anthropic API key (for AI summaries)
 
 ## Usage
 
-### Basic Usage
+### Basic Usage (v1.0)
 
 ```bash
 # Analyze current directory
@@ -45,77 +51,77 @@ codedoc generate --path .
 # Analyze a specific project
 codedoc generate --path /path/to/project
 
-# Clone and analyze a GitHub repo
-codedoc generate --repo-url https://github.com/user/repo.git
+# Dry run mode (skeleton report only)
+codedoc generate --path . --dry-run
 ```
 
-### Command Line Options
+### Command Line Options (v1.0)
 
 ```bash
 codedoc generate [flags]
 
-Flags:
-  --path string              Path to repository to analyze
-  --repo-url string          Git repository URL to clone and analyze
+Available Flags:
+  --path string              Path to repository to analyze (required)
   --out string               Output file name (default: CODEBASE_REPORT.md)
   --max-files int            Maximum number of files to process (default: 200)
   --max-lines-per-file int   Maximum lines per file to process (default: 1000)
-  --include-tests            Include test files in analysis
-  --dry-run                  Generate report without LLM calls
-  --lang string              Comma-separated list of languages (default: go,py,ts,js,md,yaml,dockerfile)
-  --redact-secrets           Redact potential secrets from output (default: true)
-  --force                    Force re-analysis of cached files
+  --include-tests            Include test files in analysis (default: false)
+  --dry-run                  Generate skeleton report only (default: false)
+  --lang string              Languages to analyze (default: go,py,ts,js,md,yaml,dockerfile)
+
+Flags Present but Not Functional in v1.0:
+  --repo-url string          (Not implemented)
+  --redact-secrets           (Not implemented)
+  --force                    (Not implemented)
 ```
 
-### Environment Variables
+## Examples (v1.0)
+
+### Basic Analysis
+Generate a report for current directory:
 
 ```bash
-# Set your Anthropic API key
-export ANTHROPIC_API_KEY=your_api_key_here
+codedoc generate --path .
 ```
 
-## Examples
-
-### Dry Run (No AI)
-Generate a basic report without using the LLM:
+### Dry Run Mode
+Generate skeleton report structure:
 
 ```bash
 codedoc generate --path ./myproject --dry-run
 ```
 
-### Focused Analysis
+### Language Filtering
 Analyze only specific languages:
 
 ```bash
 codedoc generate --path ./myproject --lang go,python
 ```
 
-### Large Codebase
-Handle large repositories with file limits:
+### File Limits
+Control analysis scope:
 
 ```bash
-codedoc generate --path ./large-repo --max-files 500 --max-lines-per-file 2000
+codedoc generate --path ./large-repo --max-files 100
 ```
 
-### Force Fresh Analysis
-Bypass cache for updated summaries:
-
-```bash
-codedoc generate --path ./myproject --force
-```
-
-## Output Format
+## Output Format (v1.0)
 
 CodeDoc generates a structured Markdown report (`CODEBASE_REPORT.md`) with:
 
-- **Repository metadata**: Path, last commit, language breakdown
-- **Quickstart guide**: Build/run/test instructions
-- **Architecture overview**: High-level system description (≤180 words)
-- **Key modules**: Directory structure and purpose (≤80 words each)
-- **Top files**: Important files with function summaries (≤120 words each)
-- **HTTP endpoints**: Detected API routes and handlers
-- **Data models**: Identified database/domain models
-- **Risks & TODOs**: Code quality issues and improvements
+### Currently Implemented:
+- **Repository metadata**: Path, language breakdown, file count, total LOC
+- **Language statistics**: Percentage breakdown by file type
+- **File listing**: Organized list of analyzed files
+
+### Report Sections (Skeleton Only in v1.0):
+- **Quickstart**: Placeholder section
+- **Architecture Overview**: Placeholder section
+- **Key Modules/Directories**: Basic directory listing
+- **Top Files**: File paths without summaries
+- **HTTP Endpoints**: Empty table structure
+- **Data Models**: Empty table structure
+- **Notable Risks/TODOs**: Placeholder section
 
 ## Project Structure
 
@@ -175,36 +181,45 @@ make demo
 4. Run tests and linters
 5. Submit a pull request
 
-## Configuration
-
-### Cache Directory
-
-CodeDoc stores API response caches in `.codedoc-cache/` within the analyzed repository. This directory is automatically ignored during scanning.
+## Configuration (v1.0)
 
 ### Ignore Patterns
 
-Default ignore patterns:
+Default ignore patterns (hardcoded):
 - `.git/`, `vendor/`, `node_modules/`
 - `dist/`, `build/`, `.codedoc-cache/`
 - Minified files (`*.min.js`, `*.min.css`)
-- Binary files > 1MB
+- Binary files and common build artifacts
 
-## Limitations
+### Supported Languages
 
-- **MVP Scope**: This is an MVP focused on essential features
-- **Language Support**: Best results with Go, Python, JavaScript/TypeScript
-- **API Rate Limits**: Respects Anthropic API rate limits with built-in throttling
-- **File Size**: Large files are truncated to key sections for analysis
+File extensions recognized in v1.0:
+- **Go**: `.go`
+- **Python**: `.py`
+- **JavaScript/TypeScript**: `.js`, `.ts`, `.jsx`, `.tsx`
+- **Markdown**: `.md`
+- **YAML**: `.yaml`, `.yml`
+- **Dockerfile**: `Dockerfile`, `.dockerfile`
 
-## Roadmap
+## Limitations (v1.0)
 
-Future enhancements:
-- [ ] Support for more LLM providers (OpenAI, local models)
-- [ ] Configuration file support (`.codedoc.yml`)
-- [ ] Interactive mode with progress indicators
-- [ ] HTML/JSON output formats
-- [ ] Plugin system for custom detectors
-- [ ] Incremental analysis for large codebases
+- **No AI Integration**: All summaries are placeholders
+- **Local Only**: No remote repository support
+- **Basic Analysis**: Simple file counting and language detection only
+- **No Caching**: Every run performs full analysis
+- **Limited Detection**: No framework or pattern recognition
+
+## Roadmap to v2.0
+
+Next version will include:
+- [ ] Anthropic Claude API integration for intelligent summaries
+- [ ] Git repository cloning support
+- [ ] File-level caching system
+- [ ] Framework and library detection
+- [ ] Endpoint and route detection
+- [ ] Data model identification
+- [ ] Secret redaction
+- [ ] Risk and TODO identification
 
 ## License
 
