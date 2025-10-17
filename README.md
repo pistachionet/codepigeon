@@ -1,4 +1,4 @@
-# CodeDoc v1.0 - Codebase Documentation Generator
+# CodeDoc v0.1 - Codebase Documentation Generator
 
 CodeDoc is a lightweight Go CLI tool that analyzes your codebase and generates structured documentation reports. This first version focuses on local repository scanning with basic analysis capabilities.
 
