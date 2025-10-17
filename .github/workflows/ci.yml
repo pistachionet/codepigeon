@@ -24,7 +24,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        go-version: ['1.23', '1.24']
+        go-version: ['1.24']
 
     # The actual work! "steps" are executed in order
     steps:
