@@ -15,6 +15,8 @@ help:
 	@echo "  fmt         - Format Go code"
 	@echo "  lint        - Run linters"
 	@echo "  clean       - Remove build artifacts"
+	@echo "  hooks       - Install git pre-commit hooks"
+	@echo "  unhooks     - Remove git pre-commit hooks"
 	@echo "  help        - Show this help message"
 
 build:
@@ -43,9 +45,16 @@ install:
 	@echo "$(BINARY_NAME) installed to $$GOPATH/bin"
 
 fmt:
-	@echo "Formatting code..."
-	@go fmt ./...
-	@echo "Code formatted"
+	@echo "Formatting code with gofumpt..."
+	@if command -v gofumpt &> /dev/null; then \
+		gofumpt -w .; \
+		echo "✅ Code formatted with gofumpt"; \
+	else \
+		echo "⚠️  gofumpt not found, installing..."; \
+		go install mvdan.cc/gofumpt@latest; \
+		gofumpt -w .; \
+		echo "✅ Code formatted with gofumpt"; \
+	fi
 
 lint:
 	@echo "Running linters..."
@@ -85,3 +94,20 @@ demo-with-llm: build
 
 all: clean deps fmt lint test build
 	@echo "Full build complete"
+
+hooks:
+	@echo "Installing git pre-commit hooks..."
+	@mkdir -p .git/hooks
+	@cp scripts/pre-commit .git/hooks/pre-commit
+	@chmod +x .git/hooks/pre-commit
+	@echo "✅ Pre-commit hooks installed!"
+	@echo "Hooks will run automatically before each commit."
+	@echo "To skip hooks temporarily, use: git commit --no-verify"
+
+unhooks:
+	@echo "Removing git pre-commit hooks..."
+	@rm -f .git/hooks/pre-commit
+	@echo "✅ Pre-commit hooks removed!"
+
+check: fmt lint test
+	@echo "✅ All checks passed!"

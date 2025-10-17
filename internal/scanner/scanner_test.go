@@ -110,25 +110,25 @@ func TestScanWithFixture(t *testing.T) {
 	defer os.RemoveAll(tempDir)
 
 	testFiles := map[string]string{
-		"main.go":       "package main\n\nfunc main() {\n\t// Main function\n}\n",
-		"util.go":       "package main\n\nfunc Helper() {}\n",
-		"main_test.go":  "package main\n\nimport \"testing\"\n\nfunc TestMain(t *testing.T) {}\n",
-		"README.md":     "# Test Project\n\nThis is a test.\n",
-		"go.mod":        "module test\n\ngo 1.22\n",
+		"main.go":      "package main\n\nfunc main() {\n\t// Main function\n}\n",
+		"util.go":      "package main\n\nfunc Helper() {}\n",
+		"main_test.go": "package main\n\nimport \"testing\"\n\nfunc TestMain(t *testing.T) {}\n",
+		"README.md":    "# Test Project\n\nThis is a test.\n",
+		"go.mod":       "module test\n\ngo 1.22\n",
 	}
 
 	for name, content := range testFiles {
 		path := filepath.Join(tempDir, name)
-		if err := os.WriteFile(path, []byte(content), 0644); err != nil {
+		if err := os.WriteFile(path, []byte(content), 0o644); err != nil {
 			t.Fatal(err)
 		}
 	}
 
-	if err := os.MkdirAll(filepath.Join(tempDir, "node_modules", "pkg"), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Join(tempDir, "node_modules", "pkg"), 0o755); err != nil {
 		t.Fatal(err)
 	}
 	ignoredFile := filepath.Join(tempDir, "node_modules", "pkg", "index.js")
-	if err := os.WriteFile(ignoredFile, []byte("// Should be ignored"), 0644); err != nil {
+	if err := os.WriteFile(ignoredFile, []byte("// Should be ignored"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 

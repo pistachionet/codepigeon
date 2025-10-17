@@ -1,0 +1,111 @@
+# This is the name that shows up in the Actions tab on GitHub
+name: CI
+
+# When should this workflow run?
+# "on" defines the triggers
+on:
+  # Run when code is pushed to these branches
+  push:
+    branches: [ main, v_*, feature/* ]
+
+  # Also run when someone opens a Pull Request to these branches
+  pull_request:
+    branches: [ main, v_* ]
+
+# What work should be done?
+# "jobs" contains one or more jobs that run
+jobs:
+
+  # Job 1: Test and Build
+  test:
+    name: Test and Build
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        go-version: ['1.24']
+
+    # The actual work! "steps" are executed in order
+    steps:
+      # Step 1: Check out our code
+      # Without this, the machine wouldn't have our code!
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Go on this machine
+      # The Ubuntu machine doesn't have Go installed by default
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          # Tell it which Go version we want (from matrix)
+          go-version: ${{ matrix.go-version }}
+          # This enables caching of downloaded Go modules (faster!)
+          cache: true
+
+      # Step 3: Download our project dependencies
+      # This runs "go mod download" to get all the packages we need
+      - name: Download dependencies
+        run: go mod download
+
+      # Step 4: Run our tests with coverage
+      - name: Run tests with coverage
+        run: |
+          go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
+          go tool cover -func=coverage.out
+
+      # Step 5: Upload coverage to Codecov (optional - only runs if CODECOV_TOKEN is set)
+      # To enable: Add CODECOV_TOKEN to your repository secrets
+      - name: Upload coverage
+        if: matrix.go-version == '1.24'
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.out
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
+        continue-on-error: true  # Don't fail the build if Codecov upload fails
+
+      # Step 6: Build the binary
+      # This creates the actual codedoc executable
+      - name: Build
+        run: make build
+
+      # Step 7: Verify the binary works
+      # Make sure our build created a working executable
+      - name: Test binary
+        run: |
+          echo "Checking if binary exists..."
+          test -f build/codedoc
+          echo "Binary found! Testing if it runs..."
+          ./build/codedoc --help
+
+  # Job 2: Lint the code
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+          cache: true
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v4
+        with:
+          version: latest
+          args: --timeout=5m
+
+      - name: Check formatting
+        run: |
+          if [ -n "$(gofmt -l .)" ]; then
+            echo "Go code is not formatted. Please run 'gofmt -w .'"
+            gofmt -l .
+            exit 1
+          fi

@@ -38,7 +38,7 @@ func Generate(ctx context.Context, opts Options) error {
 
 	content := builder.String()
 
-	if err := os.WriteFile(opts.OutputFile, []byte(content), 0644); err != nil {
+	if err := os.WriteFile(opts.OutputFile, []byte(content), 0o644); err != nil {
 		return fmt.Errorf("failed to write report: %w", err)
 	}
 
@@ -389,7 +389,7 @@ func identifyRisks(opts Options) []string {
 			hasDocs = true
 		}
 		if strings.Contains(file.RelativePath, ".github/workflows") ||
-		   base == ".gitlab-ci.yml" || base == "Jenkinsfile" {
+			base == ".gitlab-ci.yml" || base == "Jenkinsfile" {
 			hasCI = true
 		}
 	}
@@ -413,7 +413,7 @@ func identifyRisks(opts Options) []string {
 	for _, file := range opts.ScanResult.Files {
 		base := filepath.Base(file.RelativePath)
 		if base == "package-lock.json" || base == "go.sum" || base == "Gemfile.lock" ||
-		   base == "yarn.lock" || base == "poetry.lock" || base == "Cargo.lock" {
+			base == "yarn.lock" || base == "poetry.lock" || base == "Cargo.lock" {
 			foundLockFile = true
 			break
 		}

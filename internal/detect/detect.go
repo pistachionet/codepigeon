@@ -142,11 +142,11 @@ func detectFrameworks(file scanner.FileInfo, result *Result) {
 			"beego":       {"github.com/astaxie/beego", "beego.Run()"},
 		},
 		"python": {
-			"flask":    {"from flask import", "Flask(__name__)"},
-			"django":   {"from django", "django.contrib"},
-			"fastapi":  {"from fastapi import", "FastAPI()"},
-			"tornado":  {"import tornado", "tornado.web"},
-			"pyramid":  {"from pyramid", "pyramid.config"},
+			"flask":   {"from flask import", "Flask(__name__)"},
+			"django":  {"from django", "django.contrib"},
+			"fastapi": {"from fastapi import", "FastAPI()"},
+			"tornado": {"import tornado", "tornado.web"},
+			"pyramid": {"from pyramid", "pyramid.config"},
 		},
 		"javascript": {
 			"express": {"require('express')", "require(\"express\")", "from 'express'"},
@@ -329,7 +329,9 @@ func extractPackageJsonScripts(content string) []string {
 
 func extractGoEndpoints(content, file string) []Endpoint {
 	endpoints := []Endpoint{}
-	patterns := []string{
+	// TODO: Implement endpoint extraction
+	// Placeholder patterns for detection
+	_ = []string{
 		".Get(",
 		".Post(",
 		".Put(",
@@ -338,18 +340,17 @@ func extractGoEndpoints(content, file string) []Endpoint {
 		".Handle(",
 		".HandleFunc(",
 	}
-
-	for _, pattern := range patterns {
-		if strings.Contains(content, pattern) {
-		}
-	}
+	_ = content
+	_ = file
 
 	return endpoints
 }
 
 func extractPythonEndpoints(content, file string) []Endpoint {
 	endpoints := []Endpoint{}
-	patterns := []string{
+	// TODO: Implement endpoint extraction
+	// Placeholder patterns for detection
+	_ = []string{
 		"@app.route(",
 		"@app.get(",
 		"@app.post(",
@@ -358,18 +359,17 @@ func extractPythonEndpoints(content, file string) []Endpoint {
 		"@router.get(",
 		"@router.post(",
 	}
-
-	for _, pattern := range patterns {
-		if strings.Contains(content, pattern) {
-		}
-	}
+	_ = content
+	_ = file
 
 	return endpoints
 }
 
 func extractJSEndpoints(content, file string) []Endpoint {
 	endpoints := []Endpoint{}
-	patterns := []string{
+	// TODO: Implement endpoint extraction
+	// Placeholder patterns for detection
+	_ = []string{
 		"app.get(",
 		"app.post(",
 		"app.put(",
@@ -377,11 +377,8 @@ func extractJSEndpoints(content, file string) []Endpoint {
 		"router.get(",
 		"router.post(",
 	}
-
-	for _, pattern := range patterns {
-		if strings.Contains(content, pattern) {
-		}
-	}
+	_ = content
+	_ = file
 
 	return endpoints
 }

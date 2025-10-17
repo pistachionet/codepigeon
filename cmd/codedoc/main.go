@@ -17,17 +17,25 @@ import (
 	"github.com/codepigeon/codedoc/internal/util"
 )
 
+// Version information set by GoReleaser
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+	builtBy = "unknown"
+)
+
 type Config struct {
-	Path             string
-	RepoURL          string
-	OutputFile       string
-	MaxFiles         int
-	MaxLinesPerFile  int
-	IncludeTests     bool
-	DryRun           bool
-	Languages        []string
-	RedactSecrets    bool
-	Force            bool
+	Path            string
+	RepoURL         string
+	OutputFile      string
+	MaxFiles        int
+	MaxLinesPerFile int
+	IncludeTests    bool
+	DryRun          bool
+	Languages       []string
+	RedactSecrets   bool
+	Force           bool
 }
 
 func main() {
@@ -62,19 +70,45 @@ func parseFlags() *Config {
 	var langString string
 	generateCmd.StringVar(&langString, "lang", langDefault, langUsage)
 
+	// Check for version flag first
+	if len(os.Args) > 1 && (os.Args[1] == "-v" || os.Args[1] == "--version" || os.Args[1] == "version") {
+		fmt.Printf("codedoc version %s\n", version)
+		fmt.Printf("  commit: %s\n", commit)
+		fmt.Printf("  built at: %s\n", date)
+		fmt.Printf("  built by: %s\n", builtBy)
+		os.Exit(0)
+	}
+
+	// Check for help flag
+	if len(os.Args) > 1 && (os.Args[1] == "-h" || os.Args[1] == "--help" || os.Args[1] == "help") {
+		fmt.Println("Usage: codedoc generate [flags]")
+		fmt.Println("       codedoc version")
+		fmt.Println("\nCommands:")
+		fmt.Println("  generate    Generate codebase documentation")
+		fmt.Println("  version     Show version information")
+		fmt.Println("\nFlags for 'generate' command:")
+		generateCmd.PrintDefaults()
+		os.Exit(0)
+	}
+
 	if len(os.Args) < 2 {
 		fmt.Println("Usage: codedoc generate [flags]")
-		generateCmd.PrintDefaults()
+		fmt.Println("       codedoc version")
+		fmt.Println("\nRun 'codedoc --help' for more information")
 		os.Exit(1)
 	}
 
 	if os.Args[1] != "generate" {
 		fmt.Printf("Unknown command: %s\n", os.Args[1])
 		fmt.Println("Usage: codedoc generate [flags]")
+		fmt.Println("       codedoc version")
+		fmt.Println("\nRun 'codedoc --help' for more information")
 		os.Exit(1)
 	}
 
-	generateCmd.Parse(os.Args[2:])
+	if err := generateCmd.Parse(os.Args[2:]); err != nil {
+		log.Fatalf("Failed to parse flags: %v", err)
+	}
 
 	config.Languages = parseLanguages(langString)
 
@@ -175,10 +209,10 @@ func runGenerate(ctx context.Context, config *Config) error {
 	fmt.Printf("Analyzing repository: %s\n", repoPath)
 
 	scanOpts := scanner.Options{
-		Path:          repoPath,
-		MaxFiles:      config.MaxFiles,
-		IncludeTests:  config.IncludeTests,
-		Languages:     config.Languages,
+		Path:         repoPath,
+		MaxFiles:     config.MaxFiles,
+		IncludeTests: config.IncludeTests,
+		Languages:    config.Languages,
 	}
 
 	scanResult, err := scanner.Scan(ctx, scanOpts)

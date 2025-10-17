@@ -120,7 +120,7 @@ func BytesToHumanReadable(bytes int64) string {
 
 func EnsureDir(path string) error {
 	if !IsDirectory(path) {
-		return os.MkdirAll(path, 0755)
+		return os.MkdirAll(path, 0o755)
 	}
 	return nil
 }

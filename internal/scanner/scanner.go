@@ -36,8 +36,8 @@ type FileInfo struct {
 }
 
 type LanguageStat struct {
-	FileCount int
-	Lines     int
+	FileCount  int
+	Lines      int
 	Percentage float64
 }
 
