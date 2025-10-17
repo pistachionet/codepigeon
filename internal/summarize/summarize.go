@@ -28,11 +28,11 @@ type Result struct {
 }
 
 type FileSummary struct {
-	Path        string
-	Summary     string
-	Functions   []string
-	Cached      bool
-	TokensUsed  int
+	Path       string
+	Summary    string
+	Functions  []string
+	Cached     bool
+	TokensUsed int
 }
 
 func Summarize(ctx context.Context, opts Options) (*Result, error) {

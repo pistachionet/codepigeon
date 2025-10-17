@@ -41,7 +41,7 @@ func NewAnthropicProvider(config AnthropicConfig) (Provider, error) {
 		config.CacheDir = ".codedoc-cache"
 	}
 
-	if err := os.MkdirAll(config.CacheDir, 0755); err != nil {
+	if err := os.MkdirAll(config.CacheDir, 0o755); err != nil {
 		return nil, fmt.Errorf("failed to create cache directory: %w", err)
 	}
 
@@ -131,7 +131,7 @@ func (p *AnthropicProvider) saveToCache(cacheFile string, response SummarizeResp
 		return err
 	}
 
-	return os.WriteFile(cacheFile, data, 0644)
+	return os.WriteFile(cacheFile, data, 0o644)
 }
 
 func (p *AnthropicProvider) buildPrompt(request SummarizeRequest) string {

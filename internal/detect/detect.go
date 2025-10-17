@@ -142,11 +142,11 @@ func detectFrameworks(file scanner.FileInfo, result *Result) {
 			"beego":       {"github.com/astaxie/beego", "beego.Run()"},
 		},
 		"python": {
-			"flask":    {"from flask import", "Flask(__name__)"},
-			"django":   {"from django", "django.contrib"},
-			"fastapi":  {"from fastapi import", "FastAPI()"},
-			"tornado":  {"import tornado", "tornado.web"},
-			"pyramid":  {"from pyramid", "pyramid.config"},
+			"flask":   {"from flask import", "Flask(__name__)"},
+			"django":  {"from django", "django.contrib"},
+			"fastapi": {"from fastapi import", "FastAPI()"},
+			"tornado": {"import tornado", "tornado.web"},
+			"pyramid": {"from pyramid", "pyramid.config"},
 		},
 		"javascript": {
 			"express": {"require('express')", "require(\"express\")", "from 'express'"},

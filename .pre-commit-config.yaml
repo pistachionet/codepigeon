@@ -1,0 +1,99 @@
+# Pre-commit hooks for CodePigeon
+# Install: pip install pre-commit (or brew install pre-commit)
+# Setup: pre-commit install
+# Run manually: pre-commit run --all-files
+
+repos:
+  # General file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      # Check file issues
+      - id: check-yaml
+        args: ['--unsafe']
+      - id: check-json
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ['--maxkb=5000']
+
+      # Prevent committing sensitive data
+      - id: check-case-conflict
+      - id: detect-private-key
+
+      # Fix common issues
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+
+  # Go specific hooks
+  - repo: https://github.com/golangci/golangci-lint
+    rev: v1.55.2
+    hooks:
+      - id: golangci-lint
+        args: ['--timeout=5m', '--fix']
+
+  - repo: https://github.com/dnephin/pre-commit-golang
+    rev: v0.5.1
+    hooks:
+      # Format code
+      - id: go-fmt
+
+      # Run go vet
+      - id: go-vet
+
+      # Check imports
+      - id: go-imports
+        args: [-w, -local, github.com/codepigeon/codedoc]
+
+      # Run tests (optional - can be slow)
+      # - id: go-unit-tests
+
+      # Check for errors
+      - id: go-mod-tidy
+
+      # Build check
+      - id: go-build
+
+  # Security scanning
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: .*\.lock|package-lock\.json
+
+  # Markdown linting
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.38.0
+    hooks:
+      - id: markdownlint
+        args: ['--fix']
+        files: \.(md|markdown)$
+        exclude: ^(CODEBASE_REPORT|.*_REPORT)\.md$
+
+  # Commit message linting (optional but recommended)
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.13.0
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+
+# Configuration for specific tools
+default_language_version:
+  golang: '1.23'
+
+exclude: |
+  (?x)^(
+    .*\.pb\.go|
+    .*\.gen\.go|
+    vendor/.*|
+    build/.*|
+    \.git/.*|
+    .*\.min\.(js|css)|
+    CODEBASE_REPORT.*\.md
+  )$
+
+fail_fast: false

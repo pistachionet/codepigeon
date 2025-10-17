@@ -26,16 +26,16 @@ var (
 )
 
 type Config struct {
-	Path             string
-	RepoURL          string
-	OutputFile       string
-	MaxFiles         int
-	MaxLinesPerFile  int
-	IncludeTests     bool
-	DryRun           bool
-	Languages        []string
-	RedactSecrets    bool
-	Force            bool
+	Path            string
+	RepoURL         string
+	OutputFile      string
+	MaxFiles        int
+	MaxLinesPerFile int
+	IncludeTests    bool
+	DryRun          bool
+	Languages       []string
+	RedactSecrets   bool
+	Force           bool
 }
 
 func main() {
@@ -194,10 +194,10 @@ func runGenerate(ctx context.Context, config *Config) error {
 	fmt.Printf("Analyzing repository: %s\n", repoPath)
 
 	scanOpts := scanner.Options{
-		Path:          repoPath,
-		MaxFiles:      config.MaxFiles,
-		IncludeTests:  config.IncludeTests,
-		Languages:     config.Languages,
+		Path:         repoPath,
+		MaxFiles:     config.MaxFiles,
+		IncludeTests: config.IncludeTests,
+		Languages:    config.Languages,
 	}
 
 	scanResult, err := scanner.Scan(ctx, scanOpts)
