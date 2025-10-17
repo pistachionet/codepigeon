@@ -79,10 +79,22 @@ func parseFlags() *Config {
 		os.Exit(0)
 	}
 
+	// Check for help flag
+	if len(os.Args) > 1 && (os.Args[1] == "-h" || os.Args[1] == "--help" || os.Args[1] == "help") {
+		fmt.Println("Usage: codedoc generate [flags]")
+		fmt.Println("       codedoc version")
+		fmt.Println("\nCommands:")
+		fmt.Println("  generate    Generate codebase documentation")
+		fmt.Println("  version     Show version information")
+		fmt.Println("\nFlags for 'generate' command:")
+		generateCmd.PrintDefaults()
+		os.Exit(0)
+	}
+
 	if len(os.Args) < 2 {
 		fmt.Println("Usage: codedoc generate [flags]")
 		fmt.Println("       codedoc version")
-		generateCmd.PrintDefaults()
+		fmt.Println("\nRun 'codedoc --help' for more information")
 		os.Exit(1)
 	}
 
@@ -90,6 +102,7 @@ func parseFlags() *Config {
 		fmt.Printf("Unknown command: %s\n", os.Args[1])
 		fmt.Println("Usage: codedoc generate [flags]")
 		fmt.Println("       codedoc version")
+		fmt.Println("\nRun 'codedoc --help' for more information")
 		os.Exit(1)
 	}
 
