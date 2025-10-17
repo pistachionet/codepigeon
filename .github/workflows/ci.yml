@@ -32,10 +32,36 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 2: Just print a message to prove it works
-      - name: Say hello
-        run: echo "Hello from GitHub Actions! The pipeline is working!"
+      # Step 2: Set up Go on this machine
+      # The Ubuntu machine doesn't have Go installed by default
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          # Tell it which Go version we want (matching your project)
+          go-version: '1.23'
+          # This enables caching of downloaded Go modules (faster!)
+          cache: true
 
-      # Step 3: Show what files we have
-      - name: List files
-        run: ls -la
+      # Step 3: Download our project dependencies
+      # This runs "go mod download" to get all the packages we need
+      - name: Download dependencies
+        run: go mod download
+
+      # Step 4: Run our tests
+      # This uses your Makefile's test command
+      - name: Run tests
+        run: make test
+
+      # Step 5: Build the binary
+      # This creates the actual codedoc executable
+      - name: Build
+        run: make build
+
+      # Step 6: Verify the binary works
+      # Make sure our build created a working executable
+      - name: Test binary
+        run: |
+          echo "Checking if binary exists..."
+          test -f build/codedoc
+          echo "Binary found! Testing if it runs..."
+          ./build/codedoc --help
