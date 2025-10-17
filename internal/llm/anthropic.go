@@ -88,8 +88,8 @@ func (p *AnthropicProvider) Summarize(ctx context.Context, request SummarizeRequ
 		Tokens:  p.estimateTokens(prompt + response),
 	}
 
-	if err := p.saveToCache(cacheFile, result); err != nil {
-	}
+	// Best effort cache save - don't fail the request if caching fails
+	_ = p.saveToCache(cacheFile, result)
 
 	return result, nil
 }

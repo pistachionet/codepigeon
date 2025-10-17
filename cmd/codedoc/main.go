@@ -93,7 +93,9 @@ func parseFlags() *Config {
 		os.Exit(1)
 	}
 
-	generateCmd.Parse(os.Args[2:])
+	if err := generateCmd.Parse(os.Args[2:]); err != nil {
+		log.Fatalf("Failed to parse flags: %v", err)
+	}
 
 	config.Languages = parseLanguages(langString)
 
