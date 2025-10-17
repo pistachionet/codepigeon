@@ -277,3 +277,5 @@ func cloneRepository(repoURL string) (string, func(), error) {
 
 	return tempDir, cleanupFunc, nil
 }
+
+// Test comment

@@ -6,11 +6,11 @@ name: CI
 on:
   # Run when code is pushed to these branches
   push:
-    branches: [ main, v_1, feature/* ]
+    branches: [ main, v_*, feature/* ]
 
   # Also run when someone opens a Pull Request to these branches
   pull_request:
-    branches: [ main, v_1 ]
+    branches: [ main, v_* ]
 
 # What work should be done?
 # "jobs" contains one or more jobs that run
@@ -24,7 +24,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        go-version: ['1.22', '1.23']
+        go-version: ['1.23', '1.24']
 
     # The actual work! "steps" are executed in order
     steps:
@@ -54,9 +54,10 @@ jobs:
           go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
           go tool cover -func=coverage.out
 
-      # Step 5: Upload coverage to Codecov
+      # Step 5: Upload coverage to Codecov (optional - only runs if CODECOV_TOKEN is set)
+      # To enable: Add CODECOV_TOKEN to your repository secrets
       - name: Upload coverage
-        if: matrix.go-version == '1.23'
+        if: matrix.go-version == '1.24'
         uses: codecov/codecov-action@v4
         with:
           file: ./coverage.out
@@ -64,6 +65,7 @@ jobs:
           name: codecov-umbrella
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
+        continue-on-error: true  # Don't fail the build if Codecov upload fails
 
       # Step 6: Build the binary
       # This creates the actual codedoc executable
@@ -91,7 +93,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.23'
+          go-version: '1.24'
           cache: true
 
       - name: Run golangci-lint
