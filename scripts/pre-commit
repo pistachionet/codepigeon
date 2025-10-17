@@ -93,7 +93,8 @@ fi
 
 # 6. Check for build errors
 echo "🔨 Checking build..."
-go build -o /dev/null ./cmd/codedoc 2>/dev/null
+BUILD_TARGET="${BUILD_TARGET:-./cmd/codedoc}"
+go build -o /dev/null "$BUILD_TARGET" 2>/dev/null
 print_status $? "Build successful"
 
 # 7. Optional: Run fast tests (uncomment if desired)
