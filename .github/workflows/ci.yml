@@ -1,0 +1,41 @@
+# This is the name that shows up in the Actions tab on GitHub
+name: CI
+
+# When should this workflow run?
+# "on" defines the triggers
+on:
+  # Run when code is pushed to these branches
+  push:
+    branches: [ main, v_1, feature/pipeline-setup ]
+
+  # Also run when someone opens a Pull Request to these branches
+  pull_request:
+    branches: [ main, v_1 ]
+
+# What work should be done?
+# "jobs" contains one or more jobs that run
+jobs:
+
+  # This is our first job, we'll call it "test"
+  test:
+    # Give it a friendly name that shows in GitHub UI
+    name: Test and Build
+
+    # What computer should run this?
+    # ubuntu-latest = Linux machine provided by GitHub (free!)
+    runs-on: ubuntu-latest
+
+    # The actual work! "steps" are executed in order
+    steps:
+      # Step 1: Check out our code
+      # Without this, the machine wouldn't have our code!
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Just print a message to prove it works
+      - name: Say hello
+        run: echo "Hello from GitHub Actions! The pipeline is working!"
+
+      # Step 3: Show what files we have
+      - name: List files
+        run: ls -la
