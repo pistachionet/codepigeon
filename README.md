@@ -1,7 +1,7 @@
 # codepigeon v0.1 - Codebase Documentation Generator
 
 [![CI](https://github.com/pistachionet/codepigeon/actions/workflows/ci.yml/badge.svg)](https://github.com/pistachionet/codepigeon/actions/workflows/ci.yml)
-[![Go Report Card](https://goreportcard.com/badge/github.com/codepigeon/codedoc)](https://goreportcard.com/report/github.com/codepigeon/codedoc)
+[![Go Report Card](https://goreportcard.com/badge/github.com/codepigeon/codepigeon)](https://goreportcard.com/report/github.com/codepigeon/codepigeon)
 [![codecov](https://codecov.io/gh/pistachionet/codepigeon/branch/main/graph/badge.svg)](https://codecov.io/gh/pistachionet/codepigeon)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go Version](https://img.shields.io/badge/Go-1.22%2B-blue.svg)](https://go.dev/)
@@ -32,8 +32,8 @@ codepigeon is a lightweight Go CLI tool that analyzes your codebase and generate
 
 ```bash
 # Clone the repository
-git clone https://github.com/codepigeon/codedoc.git
-cd codedoc
+git clone https://github.com/codepigeon/codepigeon.git
+cd codepigeon
 
 # Build the binary
 make build
@@ -52,19 +52,19 @@ make install
 
 ```bash
 # Analyze current directory
-codedoc generate --path .
+codepigeon generate --path .
 
 # Analyze a specific project
-codedoc generate --path /path/to/project
+codepigeon generate --path /path/to/project
 
 # Dry run mode (skeleton report only)
-codedoc generate --path . --dry-run
+codepigeon generate --path . --dry-run
 ```
 
 ### Command Line Options (v1.0)
 
 ```bash
-codedoc generate [flags]
+codepigeon generate [flags]
 
 Available Flags:
   --path string              Path to repository to analyze (required)
@@ -87,33 +87,33 @@ Flags Present but Not Functional in v1.0:
 Generate a report for current directory:
 
 ```bash
-codedoc generate --path .
+codepigeon generate --path .
 ```
 
 ### Dry Run Mode
 Generate skeleton report structure:
 
 ```bash
-codedoc generate --path ./myproject --dry-run
+codepigeon generate --path ./myproject --dry-run
 ```
 
 ### Language Filtering
 Analyze only specific languages:
 
 ```bash
-codedoc generate --path ./myproject --lang go,python
+codepigeon generate --path ./myproject --lang go,python
 ```
 
 ### File Limits
 Control analysis scope:
 
 ```bash
-codedoc generate --path ./large-repo --max-files 100
+codepigeon generate --path ./large-repo --max-files 100
 ```
 
 ## Output Format (v1.0)
 
-CodeDoc generates a structured Markdown report (`CODEBASE_REPORT.md`) with:
+codepigeon generates a structured Markdown report (`CODEBASE_REPORT.md`) with:
 
 ### Currently Implemented:
 - **Repository metadata**: Path, language breakdown, file count, total LOC
@@ -132,8 +132,8 @@ CodeDoc generates a structured Markdown report (`CODEBASE_REPORT.md`) with:
 ## Project Structure
 
 ```
-codedoc/
-├── cmd/codedoc/          # CLI entry point
+codepigeon/
+├── cmd/codepigeon/          # CLI entry point
 ├── internal/
 │   ├── scanner/          # File system traversal and analysis
 │   ├── detect/           # Framework and pattern detection
@@ -193,7 +193,7 @@ make demo
 
 Default ignore patterns (hardcoded):
 - `.git/`, `vendor/`, `node_modules/`
-- `dist/`, `build/`, `.codedoc-cache/`
+- `dist/`, `build/`, `.codepigeon-cache/`
 - Minified files (`*.min.js`, `*.min.css`)
 - Binary files and common build artifacts
 
@@ -247,4 +247,4 @@ Built with:
 
 ---
 
-*CodeDoc - Understanding codebases, one summary at a time*
+*codepigeon - Understanding codebases, one summary at a time*
