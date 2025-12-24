@@ -1,4 +1,4 @@
-# CodeDoc v0.1 - Codebase Documentation Generator
+# codepigeon v0.1 - Codebase Documentation Generator
 
 [![CI](https://github.com/pistachionet/codepigeon/actions/workflows/ci.yml/badge.svg)](https://github.com/pistachionet/codepigeon/actions/workflows/ci.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/codepigeon/codedoc)](https://goreportcard.com/report/github.com/codepigeon/codedoc)
@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go Version](https://img.shields.io/badge/Go-1.22%2B-blue.svg)](https://go.dev/)
 
-CodeDoc is a lightweight Go CLI tool that analyzes your codebase and generates structured documentation reports. This first version focuses on local repository scanning with basic analysis capabilities.
+codepigeon is a lightweight Go CLI tool that analyzes your codebase and generates structured documentation reports. This first version focuses on local repository scanning with basic analysis capabilities.
 
 ## Version 1.0 Features (Current)
 
