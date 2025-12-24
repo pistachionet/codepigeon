@@ -17,7 +17,7 @@ CodeDoc is a lightweight Go CLI tool that analyzes your codebase and generates s
 - 🏃 **Dry Run Mode**: Generate skeleton reports without external dependencies
 - 🎯 **File Limits**: Control analysis scope with max-files and max-lines-per-file options
 
-## What's NOT in v1.0 (Coming Soon)
+## What's NOT in v1.0 
 
 - ❌ **No LLM Integration**: AI-powered summaries not yet implemented
 - ❌ **No Git Cloning**: --repo-url flag present but not functional
